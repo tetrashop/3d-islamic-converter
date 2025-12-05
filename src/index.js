@@ -8,3 +8,8 @@ root.render(
     <App />
   </React.StrictMode>
 );
+// اضافه کردن این خطوط به انتهای فایل
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+
+// ثبت Service Worker برای PWA
+serviceWorkerRegistration.register();
