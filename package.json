@@ -1,19 +1,17 @@
 {
-  "name": "3d-islamic-converter",
+  "name": "3d-islamic-converter-light",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "three": "^0.162.0",
-    "lucide-react": "^0.309.0",
-    "react-scripts": "^5.0.1"
+    "three": "0.155.0",
+    "lucide-react": "0.263.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "NODE_OPTIONS='--max-old-space-size=256' react-scripts start",
+    "build": "NODE_OPTIONS='--max-old-space-size=256' react-scripts build",
+    "test": "NODE_OPTIONS='--max-old-space-size=256' react-scripts test"
   },
   "browserslist": {
     "production": [">0.2%", "not dead", "not op_mini all"],
