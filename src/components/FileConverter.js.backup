@@ -53,6 +53,7 @@ const FileConverter = ({ onNotification }) => {
         try {
           setProgress(30);
           
+          // تشخیص Loader مناسب
           const formatInfo = supportedFormats.find(f => f.ext === file.format);
           if (!formatInfo) {
             throw new Error(`فرمت ${file.format} پشتیبانی نمی‌شود`);
@@ -67,90 +68,49 @@ const FileConverter = ({ onNotification }) => {
           });
           
           setProgress(60);
-          
-          // اضافه کردن نور به صحنه برای بهبود نمایش
-          const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-          scene.add(ambientLight);
-          const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-          directionalLight.position.set(5, 10, 7);
-          scene.add(directionalLight);
-          
           scene.add(model);
 
           // تبدیل به فرمت مقصد
+          let exporter;
           let blob;
-          let convertedName = file.name.replace(/\.\w+$/, `.${targetFormat}`);
           
           if (targetFormat === 'obj') {
-            const exporter = new OBJExporter();
+            exporter = new OBJExporter();
             const objString = exporter.parse(scene);
             blob = new Blob([objString], { type: 'text/plain' });
-            
-            console.log('OBJ Export successful, size:', objString.length, 'chars');
-            
           } else if (targetFormat === 'glb') {
-            const exporter = new GLTFExporter();
-            
-            const glbData = await new Promise((exporterResolve, exporterReject) => {
-              exporter.parse(
-                scene,
-                (result) => {
-                  if (result instanceof ArrayBuffer) {
-                    exporterResolve(result);
-                  } else {
-                    // اگر نتیجه یک آبجکت بود، آن را به ArrayBuffer تبدیل می‌کنیم
-                    try {
-                      const jsonString = JSON.stringify(result);
-                      const encoder = new TextEncoder();
-                      exporterResolve(encoder.encode(jsonString));
-                    } catch (e) {
-                      exporterReject(new Error('تبدیل GLTF به ArrayBuffer ناموفق بود'));
-                    }
-                  }
-                },
-                { binary: true }
-              );
+            exporter = new GLTFExporter();
+            const glbResult = await new Promise((exporterResolve) => {
+              exporter.parse(scene, exporterResolve, { binary: true });
             });
-            
-            blob = new Blob([glbData], { type: 'model/gltf-binary' });
-            console.log('GLB Export successful, size:', blob.size, 'bytes');
-            
+            blob = new Blob([glbResult], { type: 'application/octet-stream' });
           } else if (targetFormat === 'stl') {
+            // برای STL نیاز به منطق پیچیده‌تری دارید
             throw new Error('تبدیل به STL در این نسخه پشتیبانی نمی‌شود');
-          }
-          
-          // بررسی اینکه blob معتبر است
-          if (!blob || blob.size === 0) {
-            throw new Error('فایل تبدیل شده خالی است');
           }
           
           setProgress(90);
           
           const convertedFile = {
             id: file.id + '_converted',
-            name: convertedName,
+            name: file.name.replace(/\.\w+$/, `.${targetFormat}`),
             format: targetFormat,
             size: (blob.size / (1024 * 1024)).toFixed(2) + ' MB',
             blob: blob,
-            url: URL.createObjectURL(blob),
-            timestamp: Date.now()
+            url: URL.createObjectURL(blob)
           };
-          
-          console.log('File converted successfully:', convertedFile);
           
           setProgress(100);
           resolve(convertedFile);
           
         } catch (error) {
-          console.error('Conversion error:', error);
           reject(error);
         }
       };
       
       reader.onerror = () => reject(new Error('خطا در خواندن فایل'));
       
-      // خواندن فایل بر اساس نوع آن
-      if (file.format === 'stl' || file.format === 'glb') {
+      if (file.format === 'stl') {
         reader.readAsArrayBuffer(file.file);
       } else {
         reader.readAsText(file.file);
@@ -177,7 +137,6 @@ const FileConverter = ({ onNotification }) => {
       ));
 
       try {
-        console.log('Starting conversion for:', file.name);
         const convertedFile = await convertFile(file);
         
         setFiles(prev => prev.map(f => 
@@ -186,9 +145,8 @@ const FileConverter = ({ onNotification }) => {
             : f
         ));
 
-        onNotification('success', `فایل ${file.name} با موفقیت تبدیل شد! (حجم: ${convertedFile.size})`);
+        onNotification('success', `فایل ${file.name} با موفقیت تبدیل شد!`);
       } catch (error) {
-        console.error('Conversion failed:', error);
         setFiles(prev => prev.map(f => 
           f.id === file.id 
             ? { ...f, status: 'error', error: error.message }
@@ -203,45 +161,16 @@ const FileConverter = ({ onNotification }) => {
   };
 
   const downloadFile = (convertedFile) => {
-    try {
-      if (!convertedFile || !convertedFile.url || !convertedFile.blob) {
-        onNotification('error', 'فایل تبدیل شده معتبر نیست!');
-        return;
-      }
-      
-      if (convertedFile.blob.size === 0) {
-        onNotification('error', 'فایل تبدیل شده خالی است!');
-        return;
-      }
-      
-      console.log('Downloading file:', convertedFile.name, 'Size:', convertedFile.blob.size);
-      
-      const link = document.createElement('a');
-      link.href = convertedFile.url;
-      link.download = convertedFile.name;
-      link.style.display = 'none';
-      document.body.appendChild(link);
-      
-      // استفاده از setTimeout برای اطمینان از لود شدن لینک
-      setTimeout(() => {
-        link.click();
-        document.body.removeChild(link);
-        onNotification('success', `دانلود ${convertedFile.name} شروع شد!`);
-      }, 100);
-      
-    } catch (error) {
-      console.error('Download error:', error);
-      onNotification('error', `خطا در دانلود: ${error.message}`);
-    }
+    const link = document.createElement('a');
+    link.href = convertedFile.url;
+    link.download = convertedFile.name;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    onNotification('success', `دانلود ${convertedFile.name} شروع شد!`);
   };
 
   const removeFile = (id) => {
-    // آزاد کردن URLهای ایجاد شده برای جلوگیری از memory leak
-    const fileToRemove = files.find(f => f.id === id);
-    if (fileToRemove && fileToRemove.converted && fileToRemove.converted.url) {
-      URL.revokeObjectURL(fileToRemove.converted.url);
-    }
-    
     setFiles(prev => prev.filter(f => f.id !== id));
     onNotification('info', 'فایل حذف شد!');
   };
@@ -258,7 +187,6 @@ const FileConverter = ({ onNotification }) => {
 
   return (
     <div className="space-y-6">
-      {/* بقیه کد بدون تغییر */}
       <div className="islamic-card p-6">
         <h3 className="text-2xl font-bold text-islamic-green mb-6 flex items-center gap-3">
           <Upload size={28} />
@@ -442,7 +370,7 @@ const FileConverter = ({ onNotification }) => {
                             title="دانلود فایل تبدیل شده"
                           >
                             <Download size={16} />
-                            دانلود ({file.converted.size})
+                            دانلود
                           </button>
                         )}
                         
@@ -483,10 +411,10 @@ const FileConverter = ({ onNotification }) => {
         <div className="islamic-card p-6">
           <h4 className="font-bold text-lg mb-4 text-islamic-green flex items-center gap-2">
             <AlertCircle size={20} />
-            دیباگ فعال
+            امنیت
           </h4>
           <p className="text-gray-600">
-            کنسول مرورگر را برای اطلاعات دیباگ باز کنید (F12 → Console).
+            تمام پردازش‌ها در مرورگر شما انجام می‌شود و فایل‌ها به هیچ سروری ارسال نمی‌شوند.
           </p>
         </div>
       </div>
