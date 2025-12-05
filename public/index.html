@@ -1,27 +1,68 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#2d6a4f">
-    <meta name="description" content="مبدل سه‌بعدی اسلامی - تبدیل و نمایش فایل‌های سه‌بعدی با معماری اسلامی">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مبدل سه‌بعدی اسلامی</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🕌</text></svg>">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        .islamic-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 2px solid #d4af37;
+        }
+        .islamic-btn-primary {
+            background: linear-gradient(135deg, #1a5e25 0%, #2e8b57 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: bold;
+            border: 2px solid #d4af37;
+            transition: all 0.3s ease;
+        }
+        .islamic-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 94, 37, 0.3);
+        }
+        .islamic-btn-secondary {
+            background: linear-gradient(135deg, #d4af37 0%, #f7ef8a 100%);
+            color: #1a5e25;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            border: 2px solid #1a5e25;
+        }
+        .format-badge {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .format-obj { background: #e3f2fd; color: #1565c0; }
+        .format-stl { background: #f3e5f5; color: #7b1fa2; }
+        .format-glb { background: #e8f5e9; color: #2e7d32; }
+        .text-islamic-green { color: #1a5e25; }
+        .text-islamic-blue { color: #2c3e50; }
+        .text-islamic-gold { color: #d4af37; }
+        .border-islamic-green { border-color: #1a5e25; }
+        .border-islamic-blue { border-color: #2c3e50; }
+        .border-islamic-gold { border-color: #d4af37; }
+        .bg-islamic-green { background-color: #1a5e25; }
+        .bg-islamic-blue { background-color: #2c3e50; }
+        .bg-islamic-gold { background-color: #d4af37; }
+        .bg-gradient-islamic {
+            background: linear-gradient(135deg, #1a5e25 0%, #2c3e50 100%);
+        }
+    </style>
 </head>
 <body>
-    <noscript>
-        <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; display: flex; justify-content: center; align-items: center; z-index: 9999;">
-            <div style="text-align: center; padding: 2rem;">
-                <h1 style="color: #2d6a4f; font-family: 'Noto Naskh Arabic', serif;">جاوااسکریپت غیرفعال است!</h1>
-                <p style="margin-top: 1rem; color: #666;">
-                    برای استفاده از این برنامه، لطفاً جاوااسکریپت مرورگر خود را فعال کنید.
-                </p>
-            </div>
-        </div>
-    </noscript>
     <div id="root"></div>
 </body>
 </html>
