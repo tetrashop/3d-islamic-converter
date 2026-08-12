@@ -1,42 +1,46 @@
-# مبدل سه‌بعدی اسلامی
+# 3d Islamic Converter
 
-پروژه‌ای برای تبدیل و نمایش فایل‌های سه‌بعدی با طراحی اسلامی.
+## 📋 درباره پروژه
+این پروژه بخشی از اکوسیستم **TetraShop** است.
+
+- **نوع:** NODEJS
+- **تعداد فایل‌ها:** 31
 
 ## 🚀 ویژگی‌ها
-
-### 🛠️ مبدل فایل‌ها
-- پشتیبانی از فرمت‌های OBJ, STL, GLB, FBX, 3DS, PLY
-- تبدیل گروهی فایل‌ها
-- حفظ کیفیت در حین تبدیل
-- پردازش کاملاً در مرورگر (بدون ارسال به سرور)
-
-### 👁️ نمایشگر 3D
-- نمایش مدل‌های سه‌بعدی با WebGL
-- ۶ مدل هندسی آماده (مکعب، کره، مخروط، استوانه، حلقه، چهاروجهی)
-- تنظیم رنگ مدل و پس‌زمینه
-- قابلیت چرخش خودکار و دستی
-- حالت نمایش شبکه (Wireframe)
-
-### 🎨 طراحی
-- رنگ‌بندی اسلامی (سبز، آبی، طلایی)
-- فونت‌های فارسی (Vazirmatn + Noto Naskh Arabic)
-- طراحی واکنش‌گرا برای موبایل و دسکتاپ
-- انیمیشن‌های نرم و روان
+- کد تمیز و بهینه
+- آماده برای توسعه
+- پشتیبانی از آخرین تکنولوژی‌ها
 
 ## 📦 نصب و راه‌اندازی
 
 ### پیش‌نیازها
-- Node.js (نسخه 14 یا بالاتر)
-- npm یا yarn
+- Node.js 16+
 
 ### نصب
 ```bash
-# نصب وابستگی‌ها
+git clone https://github.com/tetrashop/3d-islamic-converter.git
+cd 3d-islamic-converter
 npm install
+```
 
-# اجرا در حالت توسعه
+## 🔧 استفاده
+```bash
 npm start
+```
 
-# ساخت نسخه تولید
-npm run build
-# 3d-islamic-converter
+## 🤝 مشارکت
+1. Fork کنید
+2. Branch جدید: `git checkout -b feature/your-feature`
+3. Commit: `git commit -m 'Add feature'`
+4. Push: `git push origin feature/your-feature`
+5. Pull Request باز کنید
+
+## 📝 مجوز
+MIT License
+
+## 🌐 ارتباط با ما
+- **وبسایت:** [tetrashop.ir](https://tetrashop.ir)
+- **گیت‌هاب:** [github.com/tetrashop](https://github.com/tetrashop)
+
+---
+**آخرین به‌روزرسانی:** 2026-08-12
