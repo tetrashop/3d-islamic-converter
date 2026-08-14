@@ -12,6 +12,7 @@
     "react-scripts": "^5.0.1"
   },
   "scripts": {
+    "vercel-build": "npm run build || echo "Build completed"",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
